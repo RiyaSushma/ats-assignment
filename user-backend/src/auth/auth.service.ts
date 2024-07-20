@@ -16,7 +16,7 @@ export class AuthService {
   }
 
   private writeUsersToFile(users: User[]): void {
-    console.log('Read users:', users);
+    console.log('Read users:', JSON.stringify(users, null, 2));
     fs.writeFileSync(this.userFilePath, JSON.stringify(users, null, 2), 'utf-8');
   }
 
