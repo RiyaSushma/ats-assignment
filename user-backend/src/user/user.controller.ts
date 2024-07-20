@@ -21,7 +21,7 @@ export class UserController {
         this.userService.create(user);
     }
 
-    @Put(':id/status')
+    @Put(':id')
     updateStatus(@Param('id', ParseIntPipe) id: number, @Body('status') status: string): void {
         this.userService.updateStatus(id, status);
     }

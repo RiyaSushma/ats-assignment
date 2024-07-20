@@ -17,8 +17,23 @@ function Users() {
         });
     }, []);
 
-    const changeStatus = async(id, status) => {
+    const changeStatus = async(id) => {
         try {
+            const response = axios.get("https://ats-assignment-1.onrender.com/user");
+            
+            const users = (await response).data;
+            const user = users.find((user) => user.id === id);
+            let status;
+
+            if(user.status === "active") {
+                status = "inactive";
+            }
+            else {
+                status =" active";
+            }
+
+            console.log("status is: ", status, id);
+
             await axios.put(`https://ats-assignment-1.onrender.com/user/${id}`, {
                 status: status,
             });
@@ -61,11 +76,11 @@ function Users() {
                             <div className="border p-3">
                                 <h5>Users</h5>
                                 <h6 className="text-muted">
-                                    Name: {user.displayName}<br />
+                                    Name: {user.name}<br />
                                     Status: {user.status}
                                 </h6>
                                 <button type="button" className="btn btn-primary me-2"
-                                    onClick={() => changeStatus(user.id, "active")}>Activate User</button>
+                                    onClick={() => changeStatus(user.id)}>Change Status</button>
                                 <button type="button" className="btn btn-danger"
                                     onClick={() => deleteUser(user.id)}>Delete User</button>
                             </div>
