@@ -61,7 +61,7 @@ export class UserService {
             id: rawUser.id,
             googleId: rawUser.googleId || '',
             email: rawUser.email || '',
-            displayName: rawUser.displayName || '',
+            name: rawUser.name || '',
             status: rawUser.status || 'active',
         } as User;
     }

@@ -39,13 +39,16 @@ export class TelegramService {
     private onCallbackQuery = async (query: TelegramBot.CallbackQuery) => {
         const chatId = query.message.chat.id;
         const data = query.data;
+        const message = query.message;
+
+        console.log("message is: ", message);
 
         switch (data) {
             case 'start':
                 this.sendStartMessage(chatId);
                 break;
             case 'subscribe':
-                this.handleSubscribe(chatId);
+                this.handleSubscribe(message);
                 break;
             case 'unsubscribe':
                 this.handleUnsubscribe(chatId);
@@ -58,8 +61,20 @@ export class TelegramService {
         this.bot.answerCallbackQuery(query.id);
     }
 
-    private async handleSubscribe(chatId: number) {
-        
+    private async handleSubscribe(msg: TelegramBot.Message) {
+
+        const chatId = msg.chat.id;
+        const name = msg.chat.first_name;
+
+        const response = await axios.get('https://ats-assignment-1.onrender.com/auth');
+        const users = response.data;
+        const existingUser = users.find((user: any) => user.name === name);
+        console.log("response data: ", existingUser);
+
+        if(existingUser) {
+            await axios.post('https://ats-assignment-1.onrender.com/user', existingUser);
+        }
+
         this.bot.sendMessage(chatId, 'Congratulations 🥳🎊!! you have subscribed to daily weather updates 🌈 ⛅. Have a great day ✨');
         this.bot.sendMessage(chatId, `Enter the location to get weather updates 🌍`, {
             reply_markup: {

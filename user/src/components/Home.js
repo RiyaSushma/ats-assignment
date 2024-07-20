@@ -15,7 +15,12 @@ function Home() {
     if(credentialResponse !== null) {
       var decoded = jwtDecode(credentialResponse.credential);
       console.log("data is: ", decoded);
-      setUserLocalStorage(JSON.stringify(decoded));
+      const decoded_data = {
+        name: decoded.name,
+        email: decoded.email,
+        status: "active"
+      }
+      setUserLocalStorage(JSON.stringify(decoded_data));
       setUser(decoded.name);
     }
   }, [credentialResponse])

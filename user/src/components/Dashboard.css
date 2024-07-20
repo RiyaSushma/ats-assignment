@@ -10,7 +10,7 @@
   .dashboard-contain {
     display: flex;
     width: 45rem;
-    height: 40rem;
+    height: 45rem;
     margin-top: 5rem;
     justify-content: center;
   }
