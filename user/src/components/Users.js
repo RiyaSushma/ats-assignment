@@ -6,7 +6,7 @@ function Users() {
     const [users, setUsers] = useState([]);
 
     useEffect(() => {
-        axios.get("https://botserver-production.up.railway.app/user")
+        axios.get("https://ats-assignment.onrender.com/auth")
         .then((response) => {
             console.log(response);
             setUsers(response.data);
@@ -17,7 +17,7 @@ function Users() {
     }, []);
 
     const changeStatus = async(chatId, status) => {
-        const response = await axios.put(`https://botserver-production.up.railway.app/user/${chatId}`, {
+        const response = await axios.put(`https://ats-assignment.onrender.com/auth/${chatId}`, {
             status: status,
         });
 
@@ -35,7 +35,7 @@ function Users() {
     };
 
     const deleteUser = async(chatId) => {
-        const response = await axios.delete(`https://botserver-production.up.railway.app/user/${chatId}`);
+        const response = await axios.delete(`https://ats-assignment.onrender.com/auth/${chatId}`);
 
         console.log(response);
         <div className="alert alert-danger">
