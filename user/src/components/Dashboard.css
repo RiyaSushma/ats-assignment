@@ -10,12 +10,14 @@
   .dashboard-contain {
     display: flex;
     width: 45rem;
-    height: 45rem;
+    min-height: 45rem;
+    height: auto;
     margin-top: 5rem;
     justify-content: center;
   }
   
   .items-dashboard-decor {
+    height: auto;
     text-align: center;
     background-color: white;
   }
