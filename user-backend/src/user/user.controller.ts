@@ -1,33 +1,33 @@
-import { Controller, Get, Post, Param, Body, Put, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Param, Body, Put, Delete, ParseIntPipe } from '@nestjs/common';
 import { UserService } from './user.service';
 import { User } from '../users/auth.entity';
 
 @Controller('user')
 export class UserController {
-    constructor(private readonly authService: UserService) {}
+    constructor(private readonly userService: UserService) {}
 
-  @Get()
-  findAll(): User[] {
-    return this.authService.findAll();
-  }
+    @Get()
+    findAll(): User[] {
+        return this.userService.findAll();
+    }
 
-  @Get(':id')
-  findOne(@Param('id') id: number): User {
-    return this.authService.findOne(id);
-  }
+    @Get(':id')
+    findOne(@Param('id', ParseIntPipe) id: number): User {
+        return this.userService.findOne(id);
+    }
 
-  @Post()
-  create(@Body() user: User): void {
-    this.authService.create(user);
-  }
+    @Post()
+    create(@Body() user: Partial<User>): void {
+        this.userService.create(user);
+    }
 
-  @Put(':id/status')
-  updateStatus(@Param('id') id: number, @Body('status') status: string): void {
-    this.authService.updateStatus(id, status);
-  }
+    @Put(':id/status')
+    updateStatus(@Param('id', ParseIntPipe) id: number, @Body('status') status: string): void {
+        this.userService.updateStatus(id, status);
+    }
 
-  @Delete(':id')
-  remove(@Param('id') id: number): void {
-    this.authService.remove(id);
-  }
+    @Delete(':id')
+    remove(@Param('id', ParseIntPipe) id: number): void {
+        this.userService.remove(id);
+    }
 }
