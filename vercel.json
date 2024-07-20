@@ -1,19 +1,18 @@
 {
-    "version": 2,
-    "builds": [
-      {
-        "src": "user/package.json",
-        "use": "@vercel/static-build",
-        "config": {
-          "distDir": "user/build"
-        }
+  "version": 2,
+  "builds": [
+    {
+      "src": "user/package.json",
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "user/build"
       }
-    ],
-    "routes": [
-      {
-        "src": "/(.*)",
-        "dest": "/user/$1"
-      }
-    ]
-  }
-  
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "/user/$1"
+    }
+  ]
+}
