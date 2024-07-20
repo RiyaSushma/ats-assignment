@@ -7,7 +7,6 @@ import LogoutButton from './Logout';
 
 function Dashboard() {
   const [user, setUser] = useState(null);
-  const [dataPosted, setDataPosted] = useState(false);
   
   useEffect(() => {
     const fetchUserData = async () => {
@@ -16,11 +15,12 @@ function Dashboard() {
         const userLocalStorage = localStorage.getItem('user');
         if (userLocalStorage) {
           console.log("User local storage:", userLocalStorage);
-          setUser(JSON.parse(userLocalStorage));
+          setUser(userLocalStorage);
         }
 
         // Check if user data needs to be posted
         const userLocalData = localStorage.getItem('userData');
+        console.log("user local data: ", JSON.parse(localStorage.getItem('userData')));
         if (userLocalData) {
           const parsedData = JSON.parse(userLocalData);
           const email = parsedData.email;
@@ -30,11 +30,11 @@ function Dashboard() {
             const existingUsers = response.data;
 
             const emailExists = existingUsers.some(user => user.email === email);
+            console.log("email exists: ", emailExists);
 
             if (!emailExists) {
               await axios.post('https://ats-assignment-1.onrender.com/auth', parsedData);
-              console.log('User data posted successfully.');
-              setDataPosted(true); // Update state to reflect successful posting
+              console.log('User data posted successfully.'); // Update state to reflect successful posting
             } else {
               console.log('Email already exists. Data will not be posted.');
             }

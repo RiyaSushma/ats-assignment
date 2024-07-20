@@ -15,13 +15,18 @@ function Home() {
     if(credentialResponse !== null) {
       var decoded = jwtDecode(credentialResponse.credential);
       console.log("data is: ", decoded);
+      const name = decoded.name.replace(/"/g, "'");
+
       const decoded_data = {
-        name: decoded.name,
+        name: name,
         email: decoded.email,
-        status: "active"
+        status: 'active'
       }
+      console.log("decoded data is: ", JSON.stringify(decoded_data));
+
       setUserLocalStorage(JSON.stringify(decoded_data));
-      setUser(decoded.name);
+      localStorage.setItem('userData', JSON.stringify(decoded_data))
+      setUser(name);
     }
   }, [credentialResponse])
 
@@ -46,9 +51,6 @@ function Home() {
             <div>
               {
                 localStorage.setItem('user', user)
-              }
-              {
-                localStorage.setItem('userData', userLocalData)
               }
               <Navigate to="/dashboard"/>
             </div>
