@@ -14,7 +14,7 @@ export class User {
     email: string;
 
     @Column()
-    displayName: string;
+    name: string;
 
     @Column({ default: 'active' })
     status: string;

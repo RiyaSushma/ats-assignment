@@ -7,6 +7,7 @@ import LogoutButton from './Logout';
 
 function Dashboard() {
   const [user, setUser] = useState(null);
+  const [dataPosted, setDataPosted] = useState(false);
 
   useEffect(() => {
 
@@ -15,15 +16,18 @@ function Dashboard() {
         const userLocalStorage = localStorage.getItem('user');
         const userLocalData = localStorage.getItem('userData');
 
-        if (userLocalStorage) {
-          console.log("user local storage: ", userLocalStorage);
-          setUser(userLocalStorage);
-        }
-        if(userLocalData) {
-          console.log("user storage: ", userLocalData);
-          const parsedData = JSON.parse(userLocalData); 
-          await axios.post('https://ats-assignment-1.onrender.com/auth', parsedData);
-          console.log('User data posted successfully.');
+        if(!dataPosted) {
+          if (userLocalStorage) {
+            console.log("user local storage: ", userLocalStorage);
+            setUser(userLocalStorage);
+          }
+          if(userLocalData) {
+            console.log("user storage: ", userLocalData);
+            const parsedData = JSON.parse(userLocalData); 
+            await axios.post('https://ats-assignment-1.onrender.com/auth', parsedData);
+            console.log('User data posted successfully.');
+          }
+          setDataPosted(true);
         }
       } catch (error) {
         console.error('Error posting user data:', error);
@@ -31,7 +35,7 @@ function Dashboard() {
     };
 
     fetchUserData();
-  }, []); 
+  }, [dataPosted]); 
 
   return (
     <div className="Dashboard">

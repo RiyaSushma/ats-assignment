@@ -4,73 +4,79 @@ import axios from 'axios';
 
 function Users() {
     const [users, setUsers] = useState([]);
+    const [alert, setAlert] = useState('');
 
     useEffect(() => {
-        axios.get("https://ats-assignment-1.onrender.com/auth")
+        axios.get("https://ats-assignment-1.onrender.com/user")
         .then((response) => {
             console.log(response);
             setUsers(response.data);
         })
         .catch((error) => {
             console.error("Error fetching user: ", error);
-        })
+        });
     }, []);
 
-    const changeStatus = async(chatId, status) => {
-        const response = await axios.put(`https://ats-assignment-1.onrender.com/auth/${chatId}`, {
-            status: status,
-        });
+    const changeStatus = async(id, status) => {
+        try {
+            await axios.put(`https://ats-assignment-1.onrender.com/user/${id}`, {
+                status: status,
+            });
 
-        console.log(response);
-        <div className="alert alert-success">
-            User ${status}
-        </div>
+            setUsers((prevUser) => prevUser.map((user) => {
+                if(user.id === id) {
+                    return { ...user, status: status };
+                }
+                return user;
+            }));
 
-        setUsers((prevUser) => prevUser.map((user) => {
-            if(user.chatId === chatId) {
-                return { ...user, status: status };
-            }
-            return user;
-        }));
+            setAlert(`User ${status}`);
+        } catch (error) {
+            console.error('Error updating status:', error);
+        }
     };
 
-    const deleteUser = async(chatId) => {
-        const response = await axios.delete(`https://ats-assignment-1.onrender.com/auth/${chatId}`);
+    const deleteUser = async(id) => {
+        try {
+            await axios.delete(`https://ats-assignment-1.onrender.com/user/${id}`);
 
-        console.log(response);
-        <div className="alert alert-danger">
-            User deleted
-        </div>
-        setUsers((prevUser) => prevUser.filter((user) => user.chatId !== chatId));
+            setUsers((prevUser) => prevUser.filter((user) => user.id !== id));
+
+            setAlert('User deleted');
+        } catch (error) {
+            console.error('Error deleting user:', error);
+        }
     };
 
     return (
-        <div>
+        <div className="container">
+            {alert && <div className={`alert ${alert.includes('deleted') ? 'alert-danger' : 'alert-success'}`}>
+                {alert}
+            </div>}
+
             {users.length > 0 ? (
-                users.map((user, index) => {
-                    <div key={user.chatId}>
-                        <div class="card" style="width: 18rem;">
-                            <div class="card-body">
-                                <h5 class="card-title">Users</h5>
-                                <h6 class="card-subtitle mb-2 text-muted">Name: {user.firstName}
-                                Status: {user.status}</h6>
-                                <button type="button" class="btn btn-primary"
-                                onClick={() => {
-                                    changeStatus(user.chatId, "Active")
-                                }}>Activate User</button>
-                                <button type="button" class="btn btn-danger"
-                                onClick={() => deleteUser(user.chatId)}>Delete User</button>
+                users.map((user) => (
+                    <div key={user.id} className="row mb-3">
+                        <div className="col">
+                            <div className="border p-3">
+                                <h5>Users</h5>
+                                <h6 className="text-muted">
+                                    Name: {user.displayName}<br />
+                                    Status: {user.status}
+                                </h6>
+                                <button type="button" className="btn btn-primary me-2"
+                                    onClick={() => changeStatus(user.id, "active")}>Activate User</button>
+                                <button type="button" className="btn btn-danger"
+                                    onClick={() => deleteUser(user.id)}>Delete User</button>
                             </div>
-                            </div>
+                        </div>
                     </div>
-                })
+                ))
             ): (
-                <div>
-                    No Subscribers
-                </div>
+                <div>No Subscribers</div>
             )}
         </div>
-    )
+    );
 }
 
-export default Users
+export default Users;
