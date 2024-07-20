@@ -1,0 +1,51 @@
+
+.items-dashboard-decor {
+    text-align: center;
+    background-color: white;
+  }
+  
+  .container-managebot-items {
+    margin-top: 2rem;
+  }
+  
+  .container-managebot-items h3 {
+    font-weight: bolder;
+  }
+  
+  .container-managebot-items h5 {
+    color: plum;
+    font-weight: 500;
+    margin-top: 3rem;
+  }
+
+  .container-managebot-items h4 {
+    font-weight: 500;
+    margin-top: 3rem;
+  }
+
+  .container-managebot-items h6 {
+    color: plum;
+    font-weight: 500;
+    margin-top: 3rem;
+  }
+
+  .container-managebot-items div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .form {
+    margin-top: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .form input {
+    margin-top: 0.80rem;
+  }
+
+  .form button {
+    margin-left: 1rem;
+  }
