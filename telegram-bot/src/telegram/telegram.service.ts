@@ -66,32 +66,38 @@ export class TelegramService {
         const chatId = msg.chat.id;
         const name = msg.chat.first_name;
 
-        const response = await axios.get('https://ats-assignment-1.onrender.com/auth');
+        const response = await axios.get('https://ats-assignment-1.onrender.com/user');
         const users = response.data;
         const existingUser = users.find((user: any) => user.name === name);
+        console.log("name is: ", name);
         console.log("response data: ", existingUser);
 
-        if(existingUser) {
+        if(!existingUser) {
             await axios.post('https://ats-assignment-1.onrender.com/user', existingUser);
         }
 
-        this.bot.sendMessage(chatId, 'Congratulations 🥳🎊!! you have subscribed to daily weather updates 🌈 ⛅. Have a great day ✨');
-        this.bot.sendMessage(chatId, `Enter the location to get weather updates 🌍`, {
-            reply_markup: {
-                one_time_keyboard: true,
-                keyboard: [
-                    [{
-                        text: "Share Location📍",
-                        request_location: true
-                    }],
-                    [{
-                        text: "Enter Location manually📍"
-                    }]
-                ]
-            }
-        });
-        this.userPreferences.set(chatId, { location: 'awaiting_location' });
-        this.logger.log(`User subscribed: ${chatId}`);
+
+        if(existingUser.status == "inactive") {
+            this.bot.sendMessage(chatId, 'Sorry 😞!! you are not allowed to get updates, your account is blocked ☹️');
+        } else {
+            this.bot.sendMessage(chatId, 'Congratulations 🥳🎊!! you have subscribed to daily weather updates 🌈 ⛅. Have a great day ✨');
+            this.bot.sendMessage(chatId, `Enter the location to get weather updates 🌍`, {
+                reply_markup: {
+                    one_time_keyboard: true,
+                    keyboard: [
+                        [{
+                            text: "Share Location📍",
+                            request_location: true
+                        }],
+                        [{
+                            text: "Enter Location manually📍"
+                        }]
+                    ]
+                }
+            });
+            this.userPreferences.set(chatId, { location: 'awaiting_location' });
+            this.logger.log(`User subscribed: ${chatId}`);
+        }
     }
 
     private async handleUnsubscribe(chatId: number) {

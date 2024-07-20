@@ -8,34 +8,47 @@ import LogoutButton from './Logout';
 function Dashboard() {
   const [user, setUser] = useState(null);
   const [dataPosted, setDataPosted] = useState(false);
-
+  
   useEffect(() => {
-
     const fetchUserData = async () => {
       try {
+        // Get user data from local storage
         const userLocalStorage = localStorage.getItem('user');
-        const userLocalData = localStorage.getItem('userData');
+        if (userLocalStorage) {
+          console.log("User local storage:", userLocalStorage);
+          setUser(JSON.parse(userLocalStorage));
+        }
 
-        if(!dataPosted) {
-          if (userLocalStorage) {
-            console.log("user local storage: ", userLocalStorage);
-            setUser(userLocalStorage);
+        // Check if user data needs to be posted
+        const userLocalData = localStorage.getItem('userData');
+        if (userLocalData) {
+          const parsedData = JSON.parse(userLocalData);
+          const email = parsedData.email;
+
+          try {
+            const response = await axios.get('https://ats-assignment-1.onrender.com/auth');
+            const existingUsers = response.data;
+
+            const emailExists = existingUsers.some(user => user.email === email);
+
+            if (!emailExists) {
+              await axios.post('https://ats-assignment-1.onrender.com/auth', parsedData);
+              console.log('User data posted successfully.');
+              setDataPosted(true); // Update state to reflect successful posting
+            } else {
+              console.log('Email already exists. Data will not be posted.');
+            }
+          } catch (error) {
+            console.error('Error checking or posting user data:', error);
           }
-          if(userLocalData) {
-            console.log("user storage: ", userLocalData);
-            const parsedData = JSON.parse(userLocalData); 
-            await axios.post('https://ats-assignment-1.onrender.com/auth', parsedData);
-            console.log('User data posted successfully.');
-          }
-          setDataPosted(true);
         }
       } catch (error) {
-        console.error('Error posting user data:', error);
+        console.error('Error handling user data:', error);
       }
     };
 
     fetchUserData();
-  }, [dataPosted]); 
+  }, []);
 
   return (
     <div className="Dashboard">
@@ -43,11 +56,11 @@ function Dashboard() {
         <div className="container items-dashboard-decor shadow-lg">
           {user ? (
             <div className="container-dashboard-items">
-            <h3>Welcome {user}</h3>
-          </div>
+              <h3>Welcome {user.name}</h3>
+            </div>
           ) : (
             <div className="container-dashboard-items">
-            <h3>Welcome to Weather Bot Admin Panel</h3>
+              <h3>Welcome to Weather Bot Admin Panel</h3>
             </div>
           )}
 
@@ -60,8 +73,8 @@ function Dashboard() {
 
           <div className="container-dashboard-items">
             <h5>Manage Subscribers</h5>
-            </div>
-            <Users/>
+          </div>
+          <Users/>
         </div>
       </div>
     </div>
