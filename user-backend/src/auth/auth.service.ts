@@ -26,6 +26,7 @@ export class AuthService {
 
   findOne(id: number): User {
     const users = this.readUsersFromFile();
+    console.log(users);
     return users.find(user => user.id === id);
   }
 
