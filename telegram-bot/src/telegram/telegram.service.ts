@@ -42,7 +42,7 @@ export class TelegramService {
 
         switch (data) {
             case 'start':
-                await this.sendStartMessage(chatId);
+                this.sendStartMessage(chatId);
                 break;
             case 'subscribe':
                 this.handleSubscribe(chatId);
@@ -59,6 +59,7 @@ export class TelegramService {
     }
 
     private async handleSubscribe(chatId: number) {
+        
         this.bot.sendMessage(chatId, 'Congratulations 🥳🎊!! you have subscribed to daily weather updates 🌈 ⛅. Have a great day ✨');
         this.bot.sendMessage(chatId, `Enter the location to get weather updates 🌍`, {
             reply_markup: {
