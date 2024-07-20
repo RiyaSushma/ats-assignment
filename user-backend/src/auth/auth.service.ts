@@ -16,7 +16,7 @@ export class AuthService {
   }
 
   private writeUsersToFile(users: User[]): void {
-    console.log('Read users:', JSON.stringify(users, null, 2));
+    console.log('Writing users to file:', JSON.stringify(users, null, 2)); // Log for debugging
     fs.writeFileSync(this.userFilePath, JSON.stringify(users, null, 2), 'utf-8');
   }
 
@@ -48,6 +48,7 @@ export class AuthService {
   remove(id: number): void {
     let users = this.readUsersFromFile();
     users = users.filter(user => user.id !== id);
+    console.log("Removing user with id:", id); // Log for debugging
     this.writeUsersToFile(users);
   }
 }

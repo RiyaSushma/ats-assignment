@@ -9,11 +9,13 @@ function Home() {
 
   const [credentialResponse, setCredentialResponse] = useState(null);
   const [user, setUser] = useState(null);
+  const [userLocalData, setUserLocalStorage] = useState(null);
 
   useEffect(() => {
     if(credentialResponse !== null) {
       var decoded = jwtDecode(credentialResponse.credential);
-      console.log(decoded);
+      console.log("data is: ", decoded);
+      setUserLocalStorage(JSON.stringify(decoded));
       setUser(decoded.name);
     }
   }, [credentialResponse])
@@ -37,7 +39,12 @@ function Home() {
           </div>
           ) : (
             <div>
-              {localStorage.setItem('user', user)}
+              {
+                localStorage.setItem('user', user)
+              }
+              {
+                localStorage.setItem('userData', userLocalData)
+              }
               <Navigate to="/dashboard"/>
             </div>
           )}
