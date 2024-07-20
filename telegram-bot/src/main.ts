@@ -7,6 +7,6 @@ dotenv.config();
 async function bootstrap() {
   console.log('TELEGRAM_TOKEN:', process.env.TELEGRAM_TOKEN);
   const app = await NestFactory.create(AppModule);
-  await app.listen(8001);
+  await app.listen(process.env.PORT || 8001);
 }
 bootstrap();
