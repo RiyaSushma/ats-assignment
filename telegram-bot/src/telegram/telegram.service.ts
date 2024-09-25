@@ -77,7 +77,7 @@ export class TelegramService {
         }
 
 
-        if(existingUser.status == "inactive") {
+        if(existingUser.status == "inactive" && existingUser) {
             this.bot.sendMessage(chatId, 'Sorry 😞!! you are not allowed to get updates, your account is blocked ☹️');
         } else {
             this.bot.sendMessage(chatId, 'Congratulations 🥳🎊!! you have subscribed to daily weather updates 🌈 ⛅. Have a great day ✨');

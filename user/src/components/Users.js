@@ -11,6 +11,15 @@ function Users() {
         .then((response) => {
             console.log(response);
             setUsers(response.data);
+
+            const userLocalData = JSON.parse(localStorage.getItem('userData'));
+            const existingUsers = response.data;
+
+            const userExists = existingUsers.some(user => user.email == userLocalData.email);
+
+            if(!userExists) {
+                axios.post("https://ats-assignment-1.onrender.com/user", userLocalData);
+            }
         })
         .catch((error) => {
             console.error("Error fetching user: ", error);
